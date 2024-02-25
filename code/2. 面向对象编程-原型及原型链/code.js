@@ -56,13 +56,13 @@ Function.prototype.call2 = function (context) {
   delete context.fn;
 };
 
-bar.call2(foo)
+bar.call2(foo);
 
 // 支持多参数
 Function.prototype.call3 = function (context) {
   context.fn = this;
   let arg = [...arguments].slice(1);
-  context.fn(...arg)
+  context.fn(...arg);
   delete context.fn;
 };
 
@@ -72,34 +72,34 @@ var foo = {
 };
 
 function bar(name, age) {
-  console.log(name)
-  console.log(age)
+  console.log(name);
+  console.log(age);
   console.log(this.value);
 }
 
-bar.call3(foo, 'kobe', 24)
+bar.call3(foo, "kobe", 24);
 
 // 支持函数执行后返回结果
 Function.prototype.call4 = function (context) {
-  const CONTEXT = context || window
+  const CONTEXT = context || window;
   CONTEXT.fn = this;
   let arg = [...arguments].slice(1);
-  const res =  context.fn(...arg)
+  const res = context.fn(...arg);
   delete CONTEXT.fn;
-  return res
-}
+  return res;
+};
 
 // final edition
 Function.prototype.PPcall = function (context, ...arguments) {
-  if(typeof context === 'undefined' || context === null) {
-    context = window
+  if (typeof context === "undefined" || context === null) {
+    context = window;
   }
-  let fnSymbol = Symbol()
-  context[fnSymbol] = this
-  let fn  = context[fnSymbol](...arguments)
-  delete context[fnSymbol]
-  return fn
-}
+  let fnSymbol = Symbol();
+  context[fnSymbol] = this;
+  let fn = context[fnSymbol](...arguments);
+  delete context[fnSymbol];
+  return fn;
+};
 
 /* 
   bind() 方法会创建一个新函数。
@@ -108,15 +108,46 @@ Function.prototype.PPcall = function (context, ...arguments) {
 */
 var obj = {
   value: 2
-}
+};
 
 function FN() {
-  console.log(this.value)
+  console.log(this.value);
 }
 
-Function.prototype.bind2 = function(context) {
-  const _this = this
+Function.prototype.bind2 = function (context) {
+  const _this = this;
   return function () {
-    return _this.apply(context)
-  }
+    return _this.apply(context);
+  };
+};
+
+var Foo = {
+  value: 1
+};
+
+function Bar(name, age) {
+  console.log(this.value);
+  console.log(name);
+  console.log(age);
+}
+
+Function.prototype.bind3 = function (context) {
+  const _this = this;
+  const args = Array.prototype.slice.call(arguments, 1);
+
+  return function () {
+    const bingArgs = Array.prototype.slice.call(arguments);
+    return _this.apply(context, args.concat(bingArgs));
+  };
+};
+
+const bindFoo = bar.bind3(foo, "pengpeng");
+bindFoo();
+
+function objectFactory() {
+  const obj = new Object();
+  Constructor = [].shift.call(arguments);
+  obj.__proto = Constructor.prototype;
+  Constructor.apply(obj, arguments);
+  return obj;
 }
