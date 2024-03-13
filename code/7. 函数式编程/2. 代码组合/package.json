@@ -1,0 +1,16 @@
+{
+  "name": "compose",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "accounting": "^0.4.1",
+    "chai": "^4.3.7",
+    "ramda": "^0.28.0"
+  }
+}

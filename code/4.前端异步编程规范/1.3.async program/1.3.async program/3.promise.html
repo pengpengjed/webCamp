@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 基本写法
+      function sleepPromise(time) {
+        // 外部不会直接传入 resolve 和 reject
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve();
+          }, time);
+        });
+      }
+
+      // 手动实现
+      class HeyiPromise {
+        resolvers = [];
+        rejecters = [];
+
+        initValue() {
+          // 初始化值
+          this.PromiseResult = null; // 终值
+          this.PromiseState = "pending"; // 状态
+        }
+
+        initBind() {
+          // 如果我们是使用 OOP（面向对象编程思想）封装的话，我们要时刻关注上下文（ctx），this 的指向
+          // 初始化this
+          this._resolve = this._resolve.bind(this);
+          this._reject = this._reject.bind(this);
+        }
+
+        constructor(executor) {
+          // 初始化 Promise 的一些基础数据
+          // 1. 初始化 Promise 状态
+          // 2. 初始化 Promise 终值
+          this.initValue();
+          // 进行 this 绑定处理
+          this.initBind();
+
+          executor(this._resolve, this._reject);
+        }
+
+        // 用于去收集成功的回调函数
+        _resolve(value) {
+          // 处理状态不可逆
+          if (this.PromiseState !== "pending") return;
+          this.PromiseState = "fulfilled";
+          this.PromiseResult = value;
+          this.resolvers.forEach((fn) => fn(value));
+        }
+
+        // 用于去收集失败的回调函数
+        _reject(reason) {
+          if (this.PromiseState !== "pending") return;
+          this.PromiseState = "rejected";
+          this.PromiseResult = reason;
+          this.rejecters.forEach((fn) => fn(reason));
+        }
+
+        then(onFulfilled, onRejected) {
+          // 接收两个回调 onFulfilled, onRejected
+
+          // 参数校验处理
+          // 参数校验，确保一定是函数
+          onFulfilled =
+            typeof onFulfilled === "function" ? onFulfilled : (val) => val;
+          onRejected =
+            typeof onRejected === "function"
+              ? onRejected
+              : (reason) => {
+                  throw reason;
+                };
+
+          // 链式调用
+          const thenPromise = new HeyiPromise((resolve, reject) => {
+            const resolvePromise = (cb) => {
+              try {
+                const x = cb(this.PromiseResult);
+                // 判断 x 的值是普通值还是 promise 对象
+                if (x === thenPromise && x) {
+                  // 如果 x === thenPromise，那么就会造成死循环
+                  throw new Error("不能返回同一个 promise");
+                }
+                // 是否是 HeyiPromise 的实例
+                if (x instanceof HeyiPromise) {
+                  x.then(resolve, reject);
+                } else {
+                  resolve(x);
+                }
+              } catch (error) {
+                reject(error);
+                throw new Error(error);
+              }
+            };
+            if (this.PromiseState === "fulfilled") {
+              // 如果当前为成功状态，执行第一个回调
+              resolvePromise(onFulfilled);
+            } else if (this.PromiseState === "rejected") {
+              // 如果当前为失败状态，执行第二哥回调
+              resolvePromise(onRejected);
+            } else if (this.PromiseState === "pending") {
+              // 如果当前为pending状态，保存回调函数
+              this.resolvers.push((result) => resolvePromise(onFulfilled));
+              this.rejecters.push((reason) => resolvePromise(onRejected));
+            }
+          });
+
+          return thenPromise;
+        }
+
+        catch() {
+          console.log("catch");
+        }
+
+        finally() {
+          console.log("finally");
+        }
+      }
+      function sleepHeyiPromise(time) {
+        return new HeyiPromise((resolve, reject) => {
+          setTimeout(() => {
+            resolve();
+          }, time);
+        });
+      }
+      const result = sleepHeyiPromise(1000);
+      console.log("🚀 ~ file: 3.promise.html:34 ~ result:", result);
+      result
+        .then(() => {
+          console.log("我是 result then");
+        })
+        .then(() => {
+          console.log("我是 result then 2");
+        });
+      // .catch(() => {
+      //   console.log("我是 result catch");
+      // });
+    </script>
+  </body>
+</html>

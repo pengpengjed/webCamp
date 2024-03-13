@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 函数后加一个 * 号，就变成了一个 generator 函数
+      // 特点
+      // 1. 可以暂停
+      function* gen() {
+        // yield 用于暂停
+        yield 1;
+        yield 2;
+        yield 3;
+      }
+      const g = gen();
+      // console.log(g.next()); // { value: 1, done: false }
+      // console.log(g.next()); // { value: 2, done: false }
+      // console.log(g.next()); // { value: 3, done: false }
+      // console.log(g.next()); // { value: undefined, done: true }
+      while (true) {
+        const { value, done } = g.next();
+        if (done) break;
+        console.log(value);
+      }
+    </script>
+  </body>
+</html>

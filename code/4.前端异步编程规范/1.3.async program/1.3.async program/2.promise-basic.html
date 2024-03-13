@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 运用 promise
+      function sleepPromise(time) {
+        // 从这里我们便能看出，promise 会有一个状态，用于告知当前 promise 的状态
+        // 1. pending
+        // 2. fulfilled
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            // resolve();
+            reject();
+          }, time);
+        });
+      }
+
+      console.log("start");
+      const result = sleepPromise(1000);
+      console.log(result);
+      result.then(() => {
+        console.log(result);
+      }).catch(() => {
+        console.log(result);
+      });
+    </script>
+  </body>
+</html>

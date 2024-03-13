@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <!-- callback 回调函数 -->
+    <script>
+      function sleepCallback(callback, time) {
+        setTimeout(() => {
+          callback();
+        }, time);
+      }
+
+      sleepCallback(() => {
+        console.log("sleep 1s");
+      }, 1000);
+
+      // 运用 promise
+      function sleepPromise(time) {
+        // 从这里我们便能看出，promise 会有一个状态，用于告知当前 promise 的状态
+        // 1. pending
+        // 2. fulfilled
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve();
+          }, time);
+        });
+      }
+
+      // 相当于我们的监听事件
+      sleepPromise(1000)
+        .then(() => {
+          console.log("sleep 1s");
+        })
+        .then(() => {
+          console.log("sleep 1s");
+        })
+        .then(() => {
+          console.log("sleep 1s");
+        });
+
+      // async await
+      async function sleepAsync(time) {
+        await sleepPromise(time);
+        console.log("sleep 1s");
+      }
+
+      sleepAsync(1000);
+
+      // 所有异步
+      Promise.all([sleepPromise(1000), sleepPromise(2000)]).then(() => {
+        console.log("1000、2000 sleep done, 2000ms 执行");
+      });
+      // 跑得快执行完之后整个 Promise 就完成
+      Promise.race([sleepPromise(1000), sleepPromise(2000)]).then(() => {
+        console.log("1000、2000 sleep done, 1000ms 执行");
+      });
+      Promise.all([sleepPromise(1000), sleepPromise(2000)])
+        .then(() => {
+          throw new Error("error");
+        })
+        // 捕获错误
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          console.log("finally");
+        });
+    </script>
+  </body>
+</html>

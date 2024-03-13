@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 运用 promise
+      function sleepPromise(time) {
+        // 从这里我们便能看出，promise 会有一个状态，用于告知当前 promise 的状态
+        // 1. pending
+        // 2. fulfilled
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve();
+          }, time);
+        });
+      }
+
+      // 相当于我们的监听事件
+      sleepPromise(1000)
+        .then(() => {
+          console.log("sleep 1s");
+        })
+        .then(() => {
+          console.log("sleep 1s");
+        })
+        .then(() => {
+          console.log("sleep 1s");
+        });
+
+      // async await
+      async function sleepAsync(time) {
+        return await sleepPromise(time);
+        console.log("sleep 1s");
+      }
+
+      const c = sleepAsync(1000);
+      console.log(
+        "🚀 ~ file: 4.async-basic.html:36 ~ sleepAsync ~ sleepAsync:",
+        c
+      );
+    </script>
+  </body>
+</html>
