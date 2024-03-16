@@ -1,0 +1,20 @@
+{
+  "name": "babel",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Heyi",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "7.23.6",
+    "@babel/types": "7.23.6",
+    "@babel/plugin-transform-arrow-functions": "7.23.3",
+    "@babel/plugin-transform-optional-chaining": "7.23.4",
+    "@babel/plugin-transform-private-methods": "7.23.3",
+    "@babel/preset-env": "7.23.6"
+  }
+}
