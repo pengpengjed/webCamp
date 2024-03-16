@@ -11,6 +11,19 @@ console.log(t());
 console.log(t());
 console.log(t());
 
+const curryTest = () => {
+  let salve =  0
+  return function () {
+    return salve +=1
+  }
+}
+
+const deepDark = curryTest()
+console.log(deepDark()) //1
+console.log(deepDark()) // 2
+console.log(deepDark()) //  3
+console.log(deepDark()) //   4
+
 // 代数模型
 function curry(func) {
   // 参数的长度，决定我是继续收集参数还是执行函数
@@ -29,6 +42,24 @@ function curry(func) {
       return inner.bind(null, ...args);
     }
   };
+}
+
+const curryTest2  = (func) => {
+  // 预加载 参数的长度, 决定我是继续收集参数还是执行函数
+  const funcArgsLen = func.length //参数长度
+  console.log(funcArgsLen)
+
+  // 通过闭包来判断你当前的函数参数达到要求 - len
+  return function inner(...args) {
+    // 判断当前收集的参数和 func 执行所需的参数是否相等或多余
+    if(args.length >= funcArgsLen) {
+      // 直接执行
+      return func(...args)
+    } else {
+      // 继续收集
+      return inner.bind(null, ... args)
+    }
+  }
 }
 
 // sum(a, b, c)

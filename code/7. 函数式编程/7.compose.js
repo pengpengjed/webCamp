@@ -19,7 +19,6 @@
  * exit  yyy
  * exit  xxx
  */
-
 const store = {};
 
 const interceptors = [
@@ -72,3 +71,23 @@ const fn = compose(...interceptors);
 
 console.log(fn(1));
 console.log(store);
+
+const composeTest = (...funcs) => {
+  // 第一步判断参数长度
+  // 如果没有参数
+  if(fucns.length === 0) {
+    return (arg) => arg
+  }
+  // 如果有一个参数
+  if(funcs.length === 1) {
+    return funcs[0]
+  }
+  // 多个参数
+  return funcs.reduce((prevFunc, curFunc) => {
+    return (...args) => {
+      return prevFunc(curFunc(...args))
+    }
+  })
+}
+
+const fn2 = composeTest(...interceptors)
