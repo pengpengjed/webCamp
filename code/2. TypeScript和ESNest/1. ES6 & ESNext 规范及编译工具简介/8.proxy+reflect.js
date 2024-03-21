@@ -18,6 +18,22 @@
 // // 对象属性的劫持
 // console.log(obj.age);
 
+const person1 = {
+  name: 'peng'
+}
+
+const proxy1 = new Proxy(person, {
+  get(target, key) {
+    if(key === 'age') {
+      return '保密'
+    }
+  },
+  set(target, key, value) {
+    // target[key] = value
+    Reflect.set(target, key, value)
+  }
+})
+
 const person = {
   name: "heyi",
 };
@@ -34,6 +50,10 @@ const proxy = new Proxy(person, {
     // Object.assign
     // 主角
     Reflect.set(target, key, value);
+    Reflect.defineProperty(target, 'hobby', {
+      value: '抽烟',
+      enumerable: true
+    })
     // Reflect.defineProperty(target, "hobby", {
     //   value: "抽烟",
     //   enumerable: true,

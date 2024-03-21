@@ -92,3 +92,17 @@ let num = 4.5;
 
 const PI = 3.14; // 解决常量的问题
 PI = 333;
+
+// var变量提升到全局作用域, seTimeout执行的时候已经循环执行完了，所以 i 的值是 5
+for (var i = 0; i < 5; i++) {
+  setTimeout(() => {
+    console.log(i)
+  }, 1000);
+}
+
+// let变量不会提升到全局作用域，所以 i 的值是 0
+for (let i = 0; i < 5; i++) {
+  setTimeout(() => {
+    console.log(i)
+  }, 1000);
+}

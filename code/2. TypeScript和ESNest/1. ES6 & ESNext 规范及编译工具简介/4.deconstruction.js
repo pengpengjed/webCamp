@@ -16,6 +16,15 @@ const a = tempArray[0];
 const b = tempArray[1];
 const c = tempArray[2];
 
+const tempObject = {
+  firstName: 'kobe',
+  lastName: 'bryant'
+}
+const {firstName: first, lastName: last, ...rest} = tempObject;
+// 可以理解为
+const FIRST = tempObject.firstName;
+const LAST = tempObject.lastName
+
 const person = {
   info: {
     name: "heyi",
