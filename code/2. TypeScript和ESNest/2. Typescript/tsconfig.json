@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "module": "CommonJS",
+    "baseUrl": "./",
+    "outDir": "lib",
+    "declaration": true,
+    "paths": {
+      "*": ["types/*", "node_modules/@types"]
+    }
+  }
+}
